@@ -2,11 +2,18 @@ package gameCommons;
 
 import java.awt.Color;
 import java.util.Random;
+import java.lang.String;
 
+import com.sun.org.apache.xerces.internal.impl.xs.util.XSInputSource;
+import environment.Environment;
+import frog.Frog;
 import graphicalElements.Element;
+import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 import util.Direction;
 import util.Case;
+
+import static java.lang.System.*;
 
 public class Game {
 
@@ -51,7 +58,7 @@ public class Game {
 	 * @param frog
 	 */
 	public void setFrog(IFrog frog) {
-		this.frog = frog;
+		this.frog = (Frog) frog;
 	}
 
 	/**
@@ -60,7 +67,7 @@ public class Game {
 	 * @param environment
 	 */
 	public void setEnvironment(IEnvironment environment) {
-		this.environment = environment;
+		this.environment = (Environment) environment;
 	}
 
 	/**
@@ -78,7 +85,10 @@ public class Game {
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		// TODO
+		if (!this.environment.isSafe(frog.getPosition())) {
+			graphic.endGameScreen("T'AS PERDU");
+			return true;
+		}
 		return false;
 	}
 
@@ -89,7 +99,10 @@ public class Game {
 	 * @return true si la partie est gagn�e
 	 */
 	public boolean testWin() {
-		// TODO
+		if (frog.getPosition().ord == height-1){
+			graphic.endGameScreen("T'AS GAGNE BENDO");
+			return true;
+		}
 		return false;
 	}
 

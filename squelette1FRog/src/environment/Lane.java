@@ -1,65 +1,111 @@
 package environment;
 
-import java.util.ArrayList;
-
-import gameCommons.Case;
 import gameCommons.Game;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import util.Case;
 
 public class Lane {
 	private Game game;
 	private int ord;
 	private int speed;
-	private ArrayList<Car> cars = new ArrayList<>();
+	private ArrayList<Car> cars;
 	private boolean leftToRight;
 	private double density;
+	private int timer;
 
-	// TODO : Constructeur(s)
+	public Lane(Game game, int ord, double density) {
+		this.cars = new ArrayList();
+		this.game = game;
+		this.ord = ord;
+		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
+		this.leftToRight = game.randomGen.nextBoolean();
+		this.density = density;
 
-	public void update() {
-
-		// TODO
-
-		// Toutes les voitures se déplacent d'une case au bout d'un nombre "tic
-		// d'horloge" égal à leur vitesse
-		// Notez que cette méthode est appelée à chaque tic d'horloge
-
-		// Les voitures doivent etre ajoutes a l interface graphique meme quand
-		// elle ne bougent pas
-
-		// A chaque tic d'horloge, une voiture peut être ajoutée
+		for(int i = 0; i < 4 * game.width; ++i) {
+			this.moveCars(true);
+			this.mayAddCar();
+		}
 
 	}
 
-	// TODO : ajout de methodes
+	public Lane(Game game, int ord) {
+		this(game, ord, game.defaultDensity);
+	}
 
-	/*
-	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase() 
-	 */
-
-	/**
-	 * Ajoute une voiture au début de la voie avec probabilité égale à la
-	 * densité, si la première case de la voie est vide
-	 */
-	private void mayAddCar() {
-		if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
-			if (game.randomGen.nextDouble() < density) {
-				cars.add(new Car(game, getBeforeFirstCase(), leftToRight));
-			}
+	public void update() {
+		++this.timer;
+		if (this.timer <= this.speed) {
+			this.moveCars(false);
+		} else {
+			this.moveCars(true);
+			this.mayAddCar();
+			this.timer = 0;
 		}
 	}
 
+	private void moveCars(boolean b) {
+		Iterator var3 = this.cars.iterator();
+
+		while(var3.hasNext()) {
+			Car car = (Car)var3.next();
+			car.move(b);
+		}
+
+		this.removeOldCars();
+	}
+
+	private void removeOldCars() {
+		ArrayList<Car> toBeRemoved = new ArrayList();
+		Iterator var3 = this.cars.iterator();
+
+		Car c;
+		while(var3.hasNext()) {
+			c = (Car)var3.next();
+			if (!c.appearsInBounds()) {
+				toBeRemoved.add(c);
+			}
+		}
+
+		var3 = toBeRemoved.iterator();
+
+		while(var3.hasNext()) {
+			c = (Car)var3.next();
+			this.cars.remove(c);
+		}
+
+	}
+
+	private void mayAddCar() {
+		if (this.isSafe(this.getFirstCase()) && this.isSafe(this.getBeforeFirstCase()) && this.game.randomGen.nextDouble() < this.density) {
+			this.cars.add(new Car(this.game, this.getBeforeFirstCase(), this.leftToRight));
+		}
+
+	}
+
+	public boolean isSafe(Case pos) {
+		Iterator var3 = this.cars.iterator();
+
+		while(var3.hasNext()) {
+			Car car = (Car)var3.next();
+			if (car.coversCase(pos)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	private Case getFirstCase() {
-		if (leftToRight) {
-			return new Case(0, ord);
-		} else
-			return new Case(game.width - 1, ord);
+		return this.leftToRight ? new Case(0, this.ord) : new Case(this.game.width - 1, this.ord);
 	}
 
 	private Case getBeforeFirstCase() {
-		if (leftToRight) {
-			return new Case(-1, ord);
-		} else
-			return new Case(game.width, ord);
+		return this.leftToRight ? new Case(-1, this.ord) : new Case(this.game.width, this.ord);
 	}
 
+	public String toString() {
+		return "Lane [ord=" + this.ord + ", cars=" + this.cars + "]";
+	}
 }
