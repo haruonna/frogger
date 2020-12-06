@@ -12,7 +12,7 @@ public class Frog implements IFrog {
 
 	public Frog(Game game){
 		this.game = game;
-		this.myPosition = new Case(13,  0);
+		this.myPosition = new Case(game.width/2,  0);
 	}
 
 
