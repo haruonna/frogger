@@ -3,7 +3,6 @@ package environment;
 import environment.Lane;
 import gameCommons.Game;
 import gameCommons.IEnvironment;
-import infini.LaneInf;
 import util.Case;
 
 import java.util.ArrayList;
