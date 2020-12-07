@@ -17,7 +17,7 @@ public class Environment implements IEnvironment {
         this.roadLines = new ArrayList();
         this.roadLines.add(new Lane(game, 0, 0.0D));
 
-        for(int i = 1; i < game.height - 1; ++i) {
+        for(int i = 2; i < game.height - 1; ++i) {
             this.roadLines.add(new Lane(game, i));
         }
 
@@ -42,5 +42,8 @@ public class Environment implements IEnvironment {
 
     }
 
+    @Override
+    public void addLane() {
 
+    }
 }

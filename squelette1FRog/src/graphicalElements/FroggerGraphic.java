@@ -2,6 +2,7 @@ package graphicalElements;
 
 import javax.swing.*;
 
+import environment.EnvInf;
 import gameCommons.IFrog;
 import util.Direction;
 
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListener {
 	private ArrayList<Element> elementsToDisplay;
@@ -17,6 +19,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private int height;
 	private IFrog frog;
 	private JFrame frame;
+
+
 
 	public FroggerGraphic(int width, int height) {
 		this.width = width;
@@ -51,7 +55,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_UP:
+		 case KeyEvent.VK_UP:
 			frog.move(Direction.up);
 			break;
 		case KeyEvent.VK_DOWN:
@@ -88,4 +92,5 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 	}
 
-}
+	}
+

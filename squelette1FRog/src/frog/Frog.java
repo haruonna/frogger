@@ -14,7 +14,7 @@ public class Frog implements IFrog {
 
 	public Frog(Game game){
 		this.game = game;
-		this.myPosition = new Case(game.width/2,  0);
+		this.myPosition = new Case(game.width/2,  1);
 		this.direction = Direction.up;
 		this.gameLose = false;
 	}
@@ -38,7 +38,7 @@ public class Frog implements IFrog {
 				myPosition.ord = myPosition.ord + 1;
 				this.direction = Direction.up;
 			}
-			if (key.equals(Direction.down) && (myPosition.ord > 0)) {
+			if (key.equals(Direction.down) && (myPosition.ord > 1)) {
 				myPosition.ord = myPosition.ord - 1;
 				this.direction = Direction.down;
 			}

@@ -5,8 +5,10 @@ import java.util.Random;
 import java.lang.String;
 
 import com.sun.org.apache.xerces.internal.impl.xs.util.XSInputSource;
+import environment.EnvInf;
 import environment.Environment;
 import frog.Frog;
+import frog.FrogInf;
 import graphicalElements.Element;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
@@ -24,11 +26,14 @@ public class Game {
 	public final int height;
 	public final int minSpeedInTimerLoops;
 	public final double defaultDensity;
+	public int currentScore = 0;
+	public int maxScore = 0;
 
 	// Lien aux objets utilis�s
 	private IEnvironment environment;
 	private IFrog frog;
 	private IFroggerGraphics graphic;
+
 
 	/**
 	 * 
@@ -51,14 +56,14 @@ public class Game {
 		this.minSpeedInTimerLoops = minSpeedInTimerLoop;
 		this.defaultDensity = defaultDensity;
 	}
-
+	public void addLane() { this.environment.addLane(); }
 	/**
 	 * Lie l'objet frog � la partie
 	 * 
 	 * @param frog
 	 */
 	public void setFrog(IFrog frog) {
-		this.frog = (Frog) frog;
+		this.frog = frog;
 	}
 
 	/**
@@ -67,7 +72,7 @@ public class Game {
 	 * @param environment
 	 */
 	public void setEnvironment(IEnvironment environment) {
-		this.environment = (Environment) environment;
+		this.environment = environment;
 	}
 
 	/**
@@ -86,7 +91,7 @@ public class Game {
 	 */
 	public boolean testLose() {
 		if (!this.environment.isSafe(frog.getPosition())) {
-			graphic.endGameScreen("T'AS PERDU");
+			graphic.endGameScreen("Tu as perdu, ton score est: " + this.maxScore);
 			return true;
 		}
 		return false;
@@ -99,10 +104,10 @@ public class Game {
 	 * @return true si la partie est gagn�e
 	 */
 	public boolean testWin() {
-		if (frog.getPosition().ord == height-1){
+		/*if (frog.getPosition().ord == height-1){
 			graphic.endGameScreen("T'AS GAGNE BENDO");
 			return true;
-		}
+		}*/
 		return false;
 	}
 
@@ -113,9 +118,10 @@ public class Game {
 	public void update() {
 		graphic.clear();
 		environment.update();
-		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		this.graphic.add(new Element(frog.getPosition().absc, 1, Color.GREEN));
 		testLose();
 		testWin();
 	}
+
 
 }
